@@ -106,23 +106,20 @@ namespace Plugin.Segmented.Control
 
         private void OnSelectedItemChanged(bool forceUpdateSelectedSegment = false)
         {
-            if (TextPropertyName != null)
+            var selectedItem = SelectedItem;
+            var selectedIndex = Children.IndexOf(item => Equals(item.Item, selectedItem));
+            if (selectedIndex == -1)
             {
-                var selectedItem = SelectedItem;
-                var selectedIndex = Children.IndexOf(item => item.Item == selectedItem);
-                if (selectedIndex == -1)
-                {
-                    selectedIndex = SelectedSegment;
-                    if (selectedIndex < 0 || selectedIndex >= Children.Count)
-                        SelectedSegment = 0;
-                    else if(SelectedSegment != selectedIndex)
-                        SelectedSegment = selectedIndex;
-                    else if(forceUpdateSelectedSegment)
-                        OnSelectedSegmentChanged();
-                }
-                else if (selectedIndex != SelectedSegment)
+                selectedIndex = SelectedSegment;
+                if (selectedIndex < 0 || selectedIndex >= Children.Count)
+                    SelectedSegment = 0;
+                else if (SelectedSegment != selectedIndex)
                     SelectedSegment = selectedIndex;
+                else if (forceUpdateSelectedSegment)
+                    OnSelectedSegmentChanged();
             }
+            else if (selectedIndex != SelectedSegment)
+                SelectedSegment = selectedIndex;
         }
 
         public IEnumerable ItemsSource
